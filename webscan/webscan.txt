@@ -1,0 +1,49 @@
+[Web Scanning]
+
+[Task 1]
+Deploy Machine
+
+[Task 2 Nikto]
+host: -h
+disable secure transport:-nossl
+force secure transport: -ssl
+set specific port: -port
+verify database: -dbcheck
+mutation: -mutate
+=>options:
+1 – Test all files with all root directories
+2 – Guess for password file names
+3 – Enumerate user names via Apache (/~user type requests)
+4 – Enumerate user names via cgiwrap (/cgi-bin/cgiwrap/~user type requests)
+5 – Attempt to brute force sub-domain names, assume that the host name is the parent domain
+6 – Attempt to guess directory names from the supplied dictionary file
+#Specify mutation technique. 
+#A mutation will cause Nikto to combine tests or attempt to guess values
+Credential:id
+ex. user:admin
+    password: PrettyAwesomePassword1234
+=> nikto -id admin:PrettyAwesomePassword1234
+#Scan using nikto
+nikto -h <ip>
+Web server:Apache/2.4.7
+config directory:OSVDB-3268: /config/: Directory indexing found
+Pause until condition:-until
+List plugins:-list-plugins
+Using grep: nikto -list-plugins | grep outdated
+specify test: -Plugin test
+Check if host is updated/outdated:-plugin outdated
+Standard host test: -plugin tests
+
+[Task 3 ZAP!]
+Specify target:URL to attack
+File that can disclose "hidden sections":robots.txt
+The robots.txt file disallows indexing of "/"
+$ curl -s http://10.10.24.129/robots.txt
+User-agent: *
+Disallow: /
+Images:/dvwa/images/
+Prevent Javascript to access cookies:HttpOnly
+Out of scope url:http://www.dvwa.co.uk/
+Insecure:Web Browser XSS Protection Not Enabled
+Request:GET
+Submit: POST

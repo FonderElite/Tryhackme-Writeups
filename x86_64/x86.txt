@@ -1,0 +1,164 @@
+[Intro To x68_64]
+[Task 1  Description and Objectives]
+user:tryhackme
+pass:reismyfavl33t
+ssh tryhackme@10.10.221.208
+[Reverse engineering with r2]
+[Task 2  Introduction]
+Execute program: ./intro in introduction directory
+#Radare2
+r2 -d intro
+#Analyze the program
+aaa
+#Analyses all symbols and entry points in the executable
+to set the disassembly syntax to AT&T: e asm.syntax=att
+#Help Command:
+?
+#Specific Help(Ex. help for analysis):
+a?
+#Once the analysis is complete:
+afl
+[0x7fc4b2cfe090]> afl
+0x55c9e25bc560    1 42           entry0
+0x55c9e27bcfe0    1 4124         reloc.__libc_start_main
+0x55c9e25bc590    4 50   -> 40   sym.deregister_tm_clones
+0x55c9e25bc5d0    4 66   -> 57   sym.register_tm_clones
+0x55c9e25bc620    5 58   -> 51   entry.fini0
+0x55c9e25bc550    1 6            sym..plt.got
+0x55c9e25bc660    1 10           entry.init0
+0x55c9e25bc730    1 2            sym.__libc_csu_fini
+0x55c9e25bc734    1 9            sym._fini
+0x55c9e25bc6c0    4 101          sym.__libc_csu_init
+0x55c9e25bc66a    1 78           main
+0x55c9e25bc540    1 6            sym.imp.__printf_chk
+0x55c9e25bc510    3 23           sym._init
+0x55c9e25bc000    3 97   -> 123  map.home_tryhackme_introduction_intro.r_x
+
+pdf@main
+[0x7fc4b2cfe090]> pdf @main
+/ (fcn) main 78
+|   int main (int argc, char **argv, char **envp);
+|           ; DATA XREF from entry0 (0x55c9e25bc57d)
+|           0x55c9e25bc66a      4883ec08       subq $8, %rsp
+|           0x55c9e25bc66e      b902000000     movl $2, %ecx
+|           0x55c9e25bc673      ba01000000     movl $1, %edx
+|           0x55c9e25bc678      488d35c90000.  leaq str.value_for_a_is__d_and_b_is__d, %rsi ; 0x55c9e25bc748 ; "value for a is %d and b is %d\n"      
+|           0x55c9e25bc67f      bf01000000     movl $1, %edi
+|           0x55c9e25bc684      b800000000     movl $0, %eax
+|           0x55c9e25bc689      e8b2feffff     callq sym.imp.__printf_chk
+|           0x55c9e25bc68e      b901000000     movl $1, %ecx
+|           0x55c9e25bc693      ba02000000     movl $2, %edx
+|           0x55c9e25bc698      488d35c90000.  leaq str.value_of_a_is__d_and_b_is__d, %rsi ; 0x55c9e25bc768 ; "value of a is %d and b is %d\n"        
+|           0x55c9e25bc69f      bf01000000     movl $1, %edi
+|           0x55c9e25bc6a4      b800000000     movl $0, %eax
+|           0x55c9e25bc6a9      e892feffff     callq sym.imp.__printf_chk
+|           0x55c9e25bc6ae      b800000000     movl $0, %eax
+|           0x55c9e25bc6b3      4883c408       addq $8, %rsp
+\           0x55c9e25bc6b7      c3             retq
+
+#The core of assembly language involves using registers to do the following:
+*Transfer data between memory and register, and vice versa
+*Perform arithmetic operations on registers and data
+*Transfer control to other parts of the program
+Since the architecture is x86-64, 
+the registers are 64 bit and Intel has a list of 16 registers:
+#Move Data Registers:movq source, destination
+=======================================================================================================|
+Transferring constants(which are prefixed using the $ operator)                                        |
+e.g. movq $3 rax would move the constant 3 to the register                                             |
+=======================================================================================================|
+Transferring values from a register e.g. movq                                                          |
+%rax %rbx which involves moving value from rax to rbx                                                  | 
+========================================================================================================
+Transferring values from memory which is shown by putting registers inside brackets e.g. movq %rax (%rbx) 
+which means move value stored in %rax to memory location represented by %rbx.                          |
+========================================================================================================
+    Intel Data Type Suffix Size  (bytes)
+0              Byte           b        1
+1              Word           w        2
+2       Double Word           l        4
+3          QuadWord           q        8
+4          QuadWord           q        8
+5  Single Precision           s        4
+6  Double Precision           l        8
+=========================================
+(Rb, Ri) = MemoryLocation[Rb + Ri]
+D(Rb, Ri) = MemoryLocation[Rb + Ri + D]
+(Rb, Ri, S) = MemoryLocation(Rb + S * Ri]
+D(Rb, Ri, S) = MemoryLocation[Rb + S * Ri + D]
+=========================================
+leaq source, destination: this instruction sets destination to the address denoted by the expression in source
+addq source, destination: destination = destination + source
+subq source, destination: destination = destination - source
+imulq source, destination: destination = destination * source
+salq source, destination: destination = destination << source where << is the left bit shifting operator
+sarq source, destination: destination = destination >> source where >> is the right bit shifting operator
+xorq source, destination: destination = destination XOR source
+andq source, destination: destination = destination & source
+orq source, destination: destination = destination | source
+========================================
+[Task 3  If Statements]
+
+if(condition){
+  do-stuff-here
+}else if(condition) //this is an optional condition {
+  do-stuff-here
+}else {
+  do-stuff-here
+}
+
+#cmpq source2, source1: it is like computing a-b without 
+setting destination
+#testq source2, source1: it is like computing a&b without 
+setting destination
+
+   JumpType         Description
+0       jmp       Unconditional
+1        je          Equal/Zero
+2       jne  Not Equal/Not Zero
+3        js            Negative
+4       jns         Nonnegative
+5        jg             Greater
+6       jge    Greater or Equal
+7        jl                Less
+8       jle       Less or Equal
+9        ja     Above(unsigned)
+10       jb     Above(Unsigned)
+
+[Task 4  If Statements Continued]
+#Go to the if-statement folder and Start 
+r2 with r2 -d if1
+aaa
+afl
+pdf @main
+#Start setting a break point on jge and jmp:
+db 0x55ae52836612db 
+0x55ae52836618
+Start program execution: dc
+
+#[*]The first 2 lines are about pushing the frame pointer onto the stack and 
+saving it(this is about how functions are called, and will be examined later)
+#[*]The next 3 lines are about assigning values 3 and 4 to the local arguments/variables var_8h and var_4h. 
+It then stores the value in var_8h in the %eax register. 
+#[*]The cmpl instruction compares the value of eax with that of the var_8h argument
+
+#To view the value of the registers, type in: 
+dr
+#Run the command: 
+px @rbp-0x4 And that shows the value of 4. 
+To check this, run the ds command which seeks/moves onto 
+#the next instruction.
+#The rip(which is the current instruction pointer) shows that it 
+#moves onto the next instruction - which shows we are correct. 
+#The current instruction then adds 5 to var_8h which is a local argument. 
+#To see that this actually happens, first check the value of var_8h, 
+run ds and check the value again. This will show it increments by 5.
+
+#task 2.2:
+px @rbp-0xc
+#task 2.3:
+px @rbp-0x4 t
+#task 2.4:
+andl $0x64, var_8h 
+
+#Not yet done
