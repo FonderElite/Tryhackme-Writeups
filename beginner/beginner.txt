@@ -1,0 +1,24 @@
+[Task 1]
+[Information Disclosure On BFFs Social Media Website] 
+[Nmap]
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; proto
+| ssh-hostkey: 
+|   3072 13:21:73:c8:8d:e5:dd:13:13:51:74:aa:ea:4b:74:64 (RSA)
+|   256 bd:f8:e9:02:c9:0d:16:35:b5:14:b9:7b:a5:c2:4f:db (ECDSA)
+|_  256 6e:fa:39:a3:60:1e:22:64:a7:07:e3:e6:36:6f:dd:8c (ED25519)
+80/tcp   open  http    Node.js (Express middleware)
+|_http-title: BFFs
+3000/tcp open  http    Node.js (Express middleware)
+|_http-title: BFFs
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+[Gobuster]
+ gobuster dir -u 10.10.235.30 -w wordlists/dirbuster/directory-list-2.3-medium.txt -t 40
+
+CTRL + U > /test-admin
+default credentials:
+    admin:admin
+    admin:password
+    administrator:password123
+
+

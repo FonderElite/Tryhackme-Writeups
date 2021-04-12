@@ -1,0 +1,50 @@
+find / -type d -name “*exploits*”
+[Find Command]
+[Task 1]
+Info..info etc..
+[Task 2]
+#1 Find all files whose name ends with “.xml”
+find / -type f -name “*.xml”
+#Find all files in the /home directory (recursive) whose name is “user.txt”
+find /home -type f -iname user.txt
+#Find all directories whose name contains the word “exploits”
+find / -type d -name “*exploits*”
+[Task 3]
+#Find all files owned by the user “kittycat”
+Ans: find / -type f -user kittycat
+#Find all files that are exactly 150 bytes in size
+Ans: find / -type f -size 150c
+Explanation: To sort the files by size, one can use ‘-size’. The size number ‘150’ is suffixed by ‘c’ denotes “bytes”.
+#Find all files in the /home directory (recursive) with size less than 2 KiB’s and extension “.txt”
+Ans: find /home -type f -size -2k -name “*.txt”
+Explanation: To sort by kilobytes, the size number is suffixed with ‘k’ 
+and due to the condition “less than”, final size denoted as ‘-2k’. In the extension, ‘*’ denotes to find all the files that contains that name ‘.txt’.
+
+#Find all files that are exactly readable and writeable by the owner, and readable by everyone else (use octal format)
+Ans: find / -type f -perm 644
+Explanation:To sort by file permissions, one can use '-perm' The file permissions can be represented 
+in either symbolic or octal format (i.e. u=r [or] 644)
+
+#Find all files that are only readable by anyone (use octal format)
+Ans: find / -type f -perm /444
+Explanation: The ‘444' is prefixed by ‘/’, so that it will match files that are readable and writable by at least one of the groups (owner, group, or others).
+
+#Find all files with write permission for the group “others”, regardless of any other permissions, with extension “.sh” (use symbolic format)
+Ans: find / -type f -perm -o=w -name “*.sh”
+
+#Find all files in the /usr/bin directory (recursive) that are owned by root and have at least the SUID permission (use symbolic format)
+Ans: find /usr/bin -type f -user root -perm -u=s
+
+#Find all files that were not accessed in the last 10 days with extension “.png”
+Ans: find / -type f -atime +10 -name “*.png”
+Explanation: To filter the file by DAYs of ACCESSING, ‘time’ is used prefixed with ‘-a’. As the requirement is that the file should NOT be accessed in last ‘10’ days, the number ‘10’ is prefixed with ‘+’.
+
+#Find all files in the /usr/bin directory (recursive) that have been modified within the last 2 hours
+Ans: find /usr/bin -type f -mmin -120
+Explanation: To filter the file by HOURs of MODIFICATION, ‘min’ is used prefixed with ‘-m’. As the requirement is that the file should have been MODIFIED within last two hours, the hours in minutes is taken prefixed with ‘-120’.
+
+[Task 4]
+2> /dev/null
+#Used with findcommand to neglect the unwanted error 
+-exec
+#Execute any defined action after performing find

