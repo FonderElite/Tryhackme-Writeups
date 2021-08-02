@@ -9,6 +9,7 @@
 
 ## CTF-Platforms
 <img src="https://cdn.vidyard.com/thumbnails/11996497/CmlLEMrH0WfOYA0mMXDxIw.jpg" width="700px"> 
+
 <ul>
   <li><a href="https://hackthebox.eu"></a></li>
  <li><a href="https://tryhackme.com"></a></li>
