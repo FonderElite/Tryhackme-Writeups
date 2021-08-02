@@ -7,5 +7,11 @@
 ## Cyber-Security
 >Computer security, cybersecurity or information technology security is the protection of computer systems and networks from information disclosure, theft of or damage to their hardware, software, or electronic data, as well as from the disruption or misdirection of the services they provide.
 
-## Cyber-Security Roadmap Guide
-<img src="https://www.pauljerimy.com/OC/Security%20Certification%20Progression%20Chart%20v7.0.png" width="850px"> 
+## CTF-Platforms
+<img src="https://docs.hackerone.com/static/fd3822ba07ba51cd69c19dfecae94608/0b533/hacker101-1.png" width="700px"> 
+<a href="https://hackthebox.eu">Hackthebox</a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
