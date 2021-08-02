@@ -9,9 +9,10 @@
 
 ## CTF-Platforms
 <img src="https://cdn.vidyard.com/thumbnails/11996497/CmlLEMrH0WfOYA0mMXDxIw.jpg" width="700px"> 
-<a href="https://hackthebox.eu">Hackthebox</a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
+<ul>
+  <li><a href="https://hackthebox.eu"></a></li>
+ <li><a href="https://tryhackme.com"></a></li>
+   <li><a href="https://www.hackerone.com/"></a></li>
+   <li><a href="https://practicalpentestlabs.com/"></a></li>
+   <li><a href="https://www.hackthissite.org/"></a></li>
+  </ul>
