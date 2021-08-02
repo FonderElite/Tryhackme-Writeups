@@ -8,4 +8,4 @@
 >Computer security, cybersecurity or information technology security is the protection of computer systems and networks from information disclosure, theft of or damage to their hardware, software, or electronic data, as well as from the disruption or misdirection of the services they provide.
 
 ## Cyber-Security Roadmap Guide
-<img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1610889439172/wAmw3SEGa.jpeg?auto=compress" width="500px"> TEST
+<img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1610889439172/wAmw3SEGa.jpeg?auto=compress" width="450px"> 
