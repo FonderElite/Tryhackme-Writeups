@@ -8,7 +8,7 @@
 >Computer security, cybersecurity or information technology security is the protection of computer systems and networks from information disclosure, theft of or damage to their hardware, software, or electronic data, as well as from the disruption or misdirection of the services they provide.
 
 ## CTF-Platforms
-<img src="https://docs.hackerone.com/static/fd3822ba07ba51cd69c19dfecae94608/0b533/hacker101-1.png" width="700px"> 
+<img src="https://cdn.vidyard.com/thumbnails/11996497/CmlLEMrH0WfOYA0mMXDxIw.jpg" width="700px"> 
 <a href="https://hackthebox.eu">Hackthebox</a>
 <a href=""></a>
 <a href=""></a>
