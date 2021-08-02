@@ -1,3 +1,3 @@
-# Tryhackme-Writeups
-**WriteUps i Made as i complete the different rooms in TryHackMe**
+## Tryhackme-Writeups
+<img src="https://blog.tryhackme.com/content/images/2020/08/1.png" width="700px">
 
